@@ -1,0 +1,206 @@
+#include <iostream>
+
+using namespace std;
+
+struct Node
+{
+    string family;
+    Node *left, *right, *parent;
+};
+
+Node *node, *root, *newNode;
+
+void create(string family)
+{
+    if (root != NULL)
+    {
+        cout << "\nTree sudah dibuat" << endl;
+    }
+    else
+    {
+        root = new Node();
+        root->family = family;
+        root->left = NULL;
+        root->right = NULL;
+        root->parent = NULL;
+    }
+}
+
+// Insert Left Node
+Node *insertleft(string family, Node *node)
+{
+    if (root == NULL)
+    {
+        cout << "\nBuat tree dulu" << endl;
+        return NULL;
+    }
+    else
+    {
+        if (node->left != NULL)
+        {
+            cout << "\nNode " << node->family << " sudah ada anak kiri!!" << endl;
+            return NULL;
+        }
+        else
+        {
+            newNode = new Node();
+            newNode->family = family;
+            newNode->left = NULL;
+            newNode->right = NULL;
+            newNode->parent = node;
+            node->left = newNode;
+            return newNode;
+        }
+    }
+}
+
+// Insert Right Node
+Node *insertright(string family, Node *node)
+{
+    if (root == NULL)
+    {
+        cout << "\nBuat tree dulu" << endl;
+        return NULL;
+    }
+    else
+    {
+        if (node->right != NULL)
+        {
+            cout << "\nNode " << node->family << " sudah ada anak kanan!!" << endl;
+            return NULL;
+        }
+        else
+        {
+            newNode = new Node();
+            newNode->family = family;
+            newNode->left = NULL;
+            newNode->right = NULL;
+            newNode->parent = node;
+            node->right = newNode;
+            return newNode;
+        }
+    }
+}
+
+// Rename Node
+void update(string family, Node *node)
+{
+    if (!root)
+    {
+        cout << "\nBuat tree terlebih dahulu!!" << endl;
+    }
+    else
+    {
+        if (!node)
+        {
+            cout << "\nNode yang ingin diganti tidak ada!!" << endl;
+        }
+        else
+        {
+            string temp = node->family;
+            node->family = family;
+            cout << "\nfamily atau file " << temp << " berhasil diubah menjadi " << family << endl;
+        }
+    }
+}
+
+// preOrder
+void preOrder(Node *node = root)
+{
+    if (!root)
+        cout << "\nBuat tree terlebih dahulu!!" << endl;
+    else
+    {
+        if (node != NULL)
+        {
+            cout << node->family << "\n";
+            preOrder(node->left);
+            preOrder(node->right);
+        }
+    }
+}
+
+// inOrder
+void inOrder(Node *node = root)
+{
+    if (!root)
+        cout << "\nBuat tree terlebih dahulu!!" << endl;
+    else
+    {
+        if (node != NULL)
+        {
+            inOrder(node->left);
+            cout << node->family << "\n";
+            inOrder(node->right);
+        }
+    }
+}
+
+// postOrder
+void postOrder(Node *node = root)
+{
+    if (!root)
+        cout << "\nBuat tree terlebih dahulu!!" << endl;
+    else
+    {
+        if (node != NULL)
+        {
+            postOrder(node->left);
+            postOrder(node->right);
+            cout << node->family << "\n";
+        }
+    }
+}
+
+int main()
+{
+    // Tree Contains
+    create("BUYUT");
+
+    Node *node2, *node3, *node4, *node5, *node6, *node7, *node8, *node9, *node10, *node11, *node12, *node13, *node14, *node15, *node16, *node17;
+
+    node2 = insertleft("MOYANG 1", root);
+    node3 = insertright("MOYANG 2", root);
+    node4 = insertleft("KAKEK 1", node2);
+    node5 = insertright("NENEK 1", node2);
+    node6 = insertleft("KAKEK 2", node3);
+    node7 = insertright("NENEK 2", node3);
+    node8 = insertleft("AYAH 1", node6);
+    node9 = insertright("IBU 1", node6);
+    node10 = insertleft("AYAH 2", node7);
+    node11 = insertright("IBU 2", node7);
+    node12 = insertleft("ANAK 1", node11);
+    node13 = insertright("ANAK 2", node11);
+    node14 = insertleft("CUCU 1", node13);
+    node15 = insertright("CUCU 2", node13);
+    node16 = insertleft("CICIT 1", node15);
+    node17 = insertright("B", node15);
+
+    // Print Before Rename
+    cout << "Pre Order: " << endl;
+    preOrder(root);
+    cout << "\n"
+         << endl;
+    cout << "In Order: " << endl;
+    inOrder(root);
+    cout << "\n"
+         << endl;
+    cout << "Post Order: " << endl;
+    postOrder(root);
+
+    // Rename File
+    update("BNEW", node17);
+
+    // Print After Rename
+    cout << "\n=== Setelah direname ===" << endl;
+    cout << "Pre Order: " << endl;
+    preOrder(root);
+    cout << "\n"
+         << endl;
+    cout << "In Order: " << endl;
+    inOrder(root);
+    cout << "\n"
+         << endl;
+    cout << "Post Order: " << endl;
+    postOrder(root);
+}
