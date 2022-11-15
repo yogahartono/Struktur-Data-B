@@ -1,0 +1,122 @@
+#include <iostream>
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+struct Node {
+    int data;
+    Node* next;
+};
+
+
+struct Stack {
+    Node* _top;
+    string _name;
+    unsigned _capacity;
+    unsigned _size;
+};
+
+
+void init(Stack* stack, string _name, unsigned capacity) {
+    stack->_top = NULL;
+    stack->_name = _name;
+    stack->_capacity = capacity;
+    stack->_size = 0;
+}
+
+
+bool isEmpty(Stack* stack) {
+    return (stack->_top == NULL);
+}
+
+bool isFull(Stack* stack) {
+    return (stack->_size >= stack->_capacity);
+}
+
+
+void push(Stack* stack, int value) {
+    if (!isFull(stack)) {
+        Node* newNode = new Node;
+
+        if(newNode) {
+            newNode->data = value;
+
+            if(isEmpty(stack)) newNode->next = NULL;
+            else newNode->next = stack->_top;
+
+            stack->_top = newNode;
+            stack->_size++;
+        }
+    }
+}
+
+
+void pop(Stack *stack) {
+    if(!isEmpty(stack)) {
+        Node *temp = stack->_top;
+        stack->_top = stack->_top->next;
+        free(temp);
+        stack->_size--;
+    }
+}
+
+void move(Stack *start, Stack *end) {
+    int temp = start->_top->data;
+    pop(start);
+    push(end, temp);
+}
+
+void printStack(Stack *stack) {
+    Node* current = stack->_top;
+
+    while(current != NULL) {
+        cout << current->data << " ";
+        current = current->next;
+    }
+}
+
+void printHanoi(Stack *start, Stack *conn, Stack *end) {
+    cout << start->_name << "\t: "; 
+    printStack(start);
+    cout << endl;
+
+    cout << conn->_name << "\t: "; 
+    printStack(conn);
+    cout << endl;
+    
+    cout << end->_name << "\t: "; 
+    printStack(end);
+    cout << endl;
+}
+
+void towerOfHanoi(unsigned n, Stack *start, Stack *end, Stack *conn)
+{
+    if (n == 0) {
+        return;
+    }
+    towerOfHanoi(n - 1, start, conn, end);
+    cout << "-> Disk " << n << " pindah dari " << start->_name << " ke " << end->_name << endl << endl;
+    move(start, end);
+    printHanoi(start, conn, end);
+    towerOfHanoi(n - 1, conn, end, start);
+}
+
+int main()
+{
+    unsigned disk;
+    cin >> disk;
+
+    Stack start, end, conn;
+    init(&start, "A", disk);
+    init(&end, "C", disk); 
+    init(&conn, "B", disk);
+
+    for (unsigned i = disk; i > 0; i--) {
+        push(&start, i);
+    }
+    printHanoi(&start, &conn, &end);
+    towerOfHanoi(disk, &start, &end, &conn);
+
+    return 0;
+}
